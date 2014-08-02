@@ -73,7 +73,7 @@ $contactForm.on('submit', function(ev){
  var button = $('#btn_cadastro');
   var div_alert = $('#div_alert');
   $.ajax({
-    url: "/"+$('#module').val()+"/crud/save",
+    url: "/"+$('#module').val()+"/crud/editAction",
     dataType: 'html',
     data: $('#frm_cadastro').serialize(),
     type: "POST",

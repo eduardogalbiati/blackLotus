@@ -8,5 +8,6 @@ interface CrudModelInterface
      *
      * @return array[quotemeta( )]
      */
-	public function loadCreateFormInfo();
+	public function loadEditViewInfo();
+	public function loadListActionInfo();
 }
