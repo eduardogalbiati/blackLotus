@@ -15,38 +15,28 @@ class UserCrudController implements CrudControllerInterface
 
 
 
-	public function editView()
+	public function NewForm()
 	{
+		
 		$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Users/Views/editView.html.twig', $userModel->loadEditViewInfo() );
+		return $this->app['twig']->render('Core/Users/Views/createForm.html.twig', $userModel->loadCreateFormInfo() );
 	}
 
-
-	public function listView()
+	public function saveAction()
 	{
-		//$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		//return $this->app['twig']->render('Core/Departments/Views/listView.html.twig', array());
-	}
-
-
-	public function listAction()
-	{
-		//$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		//return $this->app['twig']->render('Core/Departments/Views/listAction.html.twig', $DepartmentsModel->loadListActionInfo() );
-	}
-
-	public function editAction()
-	{
+		
 		$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app->json( $userModel->editAction() );
+		return $this->app->json( $userModel->saveAction() );
 	}
 
-	public function deleteAction()
+	public function ListTable()
 	{
-		//$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		//return $this->app->json( $userModel->saveAction() );
-	}
+		if (!$user instanceof UserModel) {
+			throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+		}
 
+		return $this->loadUserByUsername($user->getUsername());
+	}
 
 	
 }

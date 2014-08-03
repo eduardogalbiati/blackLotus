@@ -14,36 +14,31 @@ class DepartmentsCrudController implements CrudControllerInterface
 	  $this->app = $app;
 	}
 
-	public function editView()
+	public function NewForm()
 	{
 		
 		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Departments/Views/editView.html.twig', $DepartmentsModel->loadEditViewInfo() );
+		return $this->app['twig']->render('Core/Departments/Views/AddDepartments.twig', $DepartmentsModel->loadCreateFormInfo() );
 	}
 
-	public function listView()
+	public function ListTable()
 	{
 		//app.security.token.user.nomeUsuario
 		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Departments/Views/listView.html.twig', array());
+		return $this->app['twig']->render('Core/Departments/Views/listForm.twig', array());
 	
 	}
 
-	public function listAction()
+	public function createList()
 	{
 		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Departments/Views/listAction.html.twig', $DepartmentsModel->loadListActionInfo() );
+		return $this->app['twig']->render('Core/Departments/Views/createList.twig', $DepartmentsModel->loadListInfo() );
 	
 	}
 
-	public function editAction(){
-		//$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		//return $this->app->json( $userModel->saveAction() );
-	}
-
-	public function deleteAction(){
-		//$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		//return $this->app->json( $userModel->saveAction() );
+	public function saveAction(){
+		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);
+		return $this->app['twig']->render('Core/Departments/Views/AddDepartments.twig', $DepartmentsModel->saveAction() );
 	}
 
 	

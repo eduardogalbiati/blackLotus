@@ -46,41 +46,18 @@ $app->get('/logout', function () use ($app){
   return $app->redirect($app['url_generator']->generate('index'));
 })->bind('logout');
 
-
-
-
-
-$app->get('/users/crud/editView', function () use ($app){
+$app->get('/users/crud/new', function () use ($app){
   $class = new Core\Users\Controllers\UserCrudController($app);
-  return $class->editView();
-})->bind('users.editview');
+  return $class->NewForm();
+})->bind('users.new');
 
-$app->post('/users/crud/editAction', function () use ($app){
+$app->post('/users/crud/save', function () use ($app){
   $class = new Core\Users\Controllers\UserCrudController($app);
-  return $class->editAction();
-})->bind('users.editaction');
+  return $class->saveAction();
+})->bind('users.save');
 
 
 
-$app->get('/departments/crud/listView', function () use ($app){
-  $class = new Core\Departments\Controllers\DepartmentsCrudController($app);
-  return $class->listView();
-})->bind('departments.listview');
-
-$app->get('/departments/crud/listAction', function () use ($app){
-  $class = new Core\Departments\Controllers\DepartmentsCrudController($app);
-  return $class->listAction();
-})->bind('departments.listaction');
-
-$app->get('/departments/crud/editView', function () use ($app){
-  $class = new Core\Departments\Controllers\DepartmentsCrudController($app);
-  return $class->editView();
-})->bind('departments.editview');
-
-$app->get('/departments/crud/editAction', function () use ($app){
-  $class = new Core\Departments\Controllers\DepartmentsCrudController($app);
-  return $class->editAction();
-})->bind('departments.editaction');
 /*
 
 

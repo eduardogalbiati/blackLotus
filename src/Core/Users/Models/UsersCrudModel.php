@@ -32,7 +32,7 @@ class UsersCrudModel extends AbstractCrudModels implements CrudModelInterface
 
     }
     
-    public function loadEditViewInfo(){
+    public function loadCreateFormInfo(){
 
         //loading default entity
         $this->setInfo('registroEntity', $this->returnEntity() );
@@ -47,16 +47,8 @@ class UsersCrudModel extends AbstractCrudModels implements CrudModelInterface
 
         return $this->returnInfo();
     }
-    
-     public function loadListActionInfo(){
-       //loading departments
-        $depDataMapper = new DepartmentDataMapper($this->dbs['kernel']);
-        $this->setInfo('departamentos', $depDataMapper->getAllWithFilters($this->request) );
-       
-        return  $this->returnInfo();  // $teste[0]['departamentos'];
-    }
 
-    public function editAction(){
+    public function saveAction(){
        
         $this->setData();
         $this->validateNecessaryData();
