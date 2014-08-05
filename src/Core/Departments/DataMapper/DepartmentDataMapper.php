@@ -2,46 +2,30 @@
 
 namespace Core\Departments\DataMapper;
 
+use Core\Utils\DataMapper\AbstractDataMapper;
+use Core\Utils\DataMapper\DataMapperInterface;
+
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\Connection;
 
-use \Doctrine\DBAL\Connection;
-use \Core\Departments\Entitys\DepartmentEntity;
+use Core\Departments\Entitys\DepartmentEntity;
+use Core\Utils\Entities\AbstractEntity;
 
-class DepartmentDataMapper
+class DepartmentDataMapper extends AbstractDataMapper implements DataMapperInterface 
 {
-	private $db;
-
 	function __construct( Connection $db)
 	{
 		$this->db = $db;
 	}
 
-	function insert(UserEntity $entity)
+	public function insert( AbstractEntity $entity)
 	{
 		$array = $entity->convertToArray();
 		unset($array['nomeDepartamento']);
-		//		var_dump($array);
-
 		$this->insertTableArray('Departamentos',$array);
-		/*
-		$stmt = $this->db->prepare("SELECT 
-								   M.nomeMenu,
-								   M.nomeModulo,
-								   M.defaultPath
-							  FROM Permissoes P 
-						INNER JOIN Menu M
-								ON M.idMenu = P.idMenu
-							 WHERE P.idPermissaoTipo = '1'
-							   AND P.idPermissaoTipo = :idDepartamento
-							   AND M.idMenuPai = :idMenuPai");
-		$stmt->bindValue("idDepartamento",$idDepartamento);
-		$stmt->bindValue("idMenuPai",$menuItem);
-		$stmt->execute();
-		$childrens = $stmt->fetchAll();
-		return $childrens;
-		*/
+		
 	}
-	function update(UserEntity $entity, $id)
+	function update(AbstractEntity $entity, $id)
 	{
 		$array = $entity->convertToArray();
 		unset($array['idDepartamento']);
@@ -85,37 +69,48 @@ class DepartmentDataMapper
 		return $stmt->fetchAll();
 	}
 
-	public function getAllWithFilters(Request $request)
-	{
-		$querys = array();
-		$values = array();
 
+
+	public function getLimitWithFilters($page , Request $request, $regsPerPage = '10')
+	{
+
+		$queryBuilder = $this->db->createQueryBuilder();
+
+		//Calculating the Offset
+		$offset = (($page)?($page*$regsPerPage)-$regsPerPage:0);
+
+		//Adding select from query
+		$queryBuilder
+			->select('*')
+			->from('Departamentos','D');
+
+		//Adding Filters	
 		if($request->get('departamento')){
-			$querys[] = " AND D.nomeDepartamento LIKE :nomeDepartamento ";
-			$values[] = array('alias'=>'nomeDepartamento','value' => "%".$request->get('departamento')."%");
+			$queryBuilder
+				->where('nomeDepartamento LIKE :nomeDepartamento')
+				->setParameter('nomeDepartamento', "%".$request->get('departamento')."%");		
 		}
 		if($request->get('codigo')){
-			$querys[] = " AND D.idDepartamento = :codigo ";
-			$values[] = array('alias'=>'IdDepartamento','value' => "%".$request->get('IdDepartamento')."%");
-		}
-		$sql = "SELECT 
-				    D.*
-				  FROM 
-				    Departamentos D
-				  WHERE 1=1";
-		foreach($querys as $value){
-			$sql .= $value;
+			$queryBuilder
+				->andWhere('D.idDepartamento = :idDepartamento')
+				->setParameter('idDepartamento', $request->get('IdDepartamento'));
 		}
 
-		$stmt = $this->db->prepare($sql);
+		//Seting the Count number for pagination
+		$this->setCount(clone($queryBuilder));
 
-		foreach($values as $paramsToBind){
-			$stmt->bindValue($paramsToBind['alias'],$paramsToBind['value']);
-		}
+		//Adding offset for pagination
+		$queryBuilder
+			->setFirstResult($offset)
+			->setMaxResults($regsPerPage);
 
-		$stmt->execute();
+		//Adding order by	
+		$queryBuilder->orderBy($request->get('order_field'), $request->get('order_asc'));
+
+		//Executing Query
+		$stmt = $queryBuilder->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS , 'DepartmentEntity');
-		//print_r($stmt->fetchAll());die;
+
 		return $stmt->fetchAll();
 	}
 

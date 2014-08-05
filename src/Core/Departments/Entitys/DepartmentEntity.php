@@ -1,7 +1,10 @@
 <?Php
+
 namespace Core\Departments\Entitys;
 
-class DepartmentEntity 
+use Core\Utils\Entities\AbstractEntity;
+
+class DepartmentEntity extends AbstractEntity
 {
     private $idDepartamento;
     private $nomeDepartamento;

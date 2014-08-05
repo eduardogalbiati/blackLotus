@@ -4,6 +4,7 @@ namespace Core\Departments\Controllers;
 use Core\Utils\CrudControllerInterface;
 use Core\Departments\Models\DepartmentsCrudModel;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\HttpFoundation\Response;
 
 class DepartmentsCrudController implements CrudControllerInterface
 {
@@ -14,31 +15,35 @@ class DepartmentsCrudController implements CrudControllerInterface
 	  $this->app = $app;
 	}
 
-	public function NewForm()
+	public function editView()
 	{
 		
 		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Departments/Views/AddDepartments.twig', $DepartmentsModel->loadCreateFormInfo() );
+		return $this->app['twig']->render('Core/Departments/Views/editView.html.twig', $DepartmentsModel->loadEditViewInfo() );
 	}
 
-	public function ListTable()
+	public function listView()
 	{
 		//app.security.token.user.nomeUsuario
 		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Departments/Views/listForm.twig', array());
+		return $this->app['twig']->render('Core/Departments/Views/listView.html.twig', $DepartmentsModel->loadListViewInfo() );
 	
 	}
 
-	public function createList()
+	public function listAction()
 	{
 		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Departments/Views/createList.twig', $DepartmentsModel->loadListInfo() );
-	
+		return $this->app['twig']->render('Core/Departments/Views/listAction.html.twig', $DepartmentsModel->loadListActionInfo() );
 	}
 
-	public function saveAction(){
-		$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);
-		return $this->app['twig']->render('Core/Departments/Views/AddDepartments.twig', $DepartmentsModel->saveAction() );
+	public function editAction(){
+		//$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
+		//return $this->app->json( $userModel->saveAction() );
+	}
+
+	public function deleteAction(){
+		//$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
+		//return $this->app->json( $userModel->saveAction() );
 	}
 
 	

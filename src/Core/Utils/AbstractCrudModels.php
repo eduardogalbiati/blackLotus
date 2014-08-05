@@ -1,6 +1,8 @@
 <?Php
 namespace Core\Utils;
 
+use Symfony\Component\HttpFoundation\Request;
+
 abstract class AbstractCrudModels
 {
     protected $request;
@@ -46,7 +48,10 @@ abstract class AbstractCrudModels
           return $this->returnArray;
 
     }
-    protected function setInfo($index, $info){
+
+    protected function setInfo($index, $info)
+    {
         $this->returnArray[$index] = $info;
     }
+
 }

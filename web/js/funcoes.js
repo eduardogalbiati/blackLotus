@@ -73,7 +73,7 @@ $contactForm.on('submit', function(ev){
  var button = $('#btn_cadastro');
   var div_alert = $('#div_alert');
   $.ajax({
-    url: "/"+$('#module').val()+"/crud/save",
+    url: "/"+$('#module').val()+"/crud/editAction",
     dataType: 'html',
     data: $('#frm_cadastro').serialize(),
     type: "POST",
@@ -133,4 +133,30 @@ function convertResponseInAlert(data, div)
  div.show().html(mensagem).removeClass().addClass(classe);
 }
 
+function search(){
+   $.ajax({
+      type: "get",
+      url: "/"+$('#module').val()+"/crud/listAction",
+      data: $('#frm_filtro').serialize(),
+      success: function(data)
+      {
+       $('#list_container').html(data);
+      },
+      error: function(data) {
+       $('#list_container').html(data.responseText);
+      }
+    });
+}
 
+function loadPage(page){
+  $('#page').val(page);
+  search();
+}
+function loadPageNext(){
+  $('#page').val(parseInt($('#page').val())+1);
+  search();
+}
+function loadPageBefore(){
+  $('#page').val(parseInt($('#page').val())-1);
+  search();
+}

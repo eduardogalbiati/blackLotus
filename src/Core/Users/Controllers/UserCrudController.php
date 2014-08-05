@@ -15,28 +15,38 @@ class UserCrudController implements CrudControllerInterface
 
 
 
-	public function NewForm()
+	public function editView()
 	{
-		
 		$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app['twig']->render('Core/Users/Views/createForm.html.twig', $userModel->loadCreateFormInfo() );
+		return $this->app['twig']->render('Core/Users/Views/editView.html.twig', $userModel->loadEditViewInfo() );
 	}
 
-	public function saveAction()
+
+	public function listView()
 	{
-		
+		//$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
+		//return $this->app['twig']->render('Core/Departments/Views/listView.html.twig', array());
+	}
+
+
+	public function listAction()
+	{
+		//$DepartmentsModel = new DepartmentsCrudModel($this->app['request'], $this->app['dbs']);	
+		//return $this->app['twig']->render('Core/Departments/Views/listAction.html.twig', $DepartmentsModel->loadListActionInfo() );
+	}
+
+	public function editAction()
+	{
 		$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
-		return $this->app->json( $userModel->saveAction() );
+		return $this->app->json( $userModel->editAction() );
 	}
 
-	public function ListTable()
+	public function deleteAction()
 	{
-		if (!$user instanceof UserModel) {
-			throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
-		}
-
-		return $this->loadUserByUsername($user->getUsername());
+		//$userModel = new UsersCrudModel($this->app['request'], $this->app['dbs']);	
+		//return $this->app->json( $userModel->saveAction() );
 	}
+
 
 	
 }

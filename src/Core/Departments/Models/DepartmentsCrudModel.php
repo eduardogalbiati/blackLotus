@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Core\Utils\CrudModelInterface;
 use Core\Utils\AbstractCrudModels;
 use Core\Utils\ResponseObject;
+use Core\Utils\PaginationObject;
 
 use Core\Departments\Entitys\DepartmentEntity;
 
@@ -31,7 +32,7 @@ class DepartmentsCrudModel extends AbstractCrudModels implements CrudModelInterf
 
     }
     
-    public function loadCreateFormInfo(){
+    public function loadEditViewInfo(){
 
         //loading default entity
         $this->setInfo('registroEntity', $this->returnEntity() );
@@ -43,15 +44,23 @@ class DepartmentsCrudModel extends AbstractCrudModels implements CrudModelInterf
         return $this->returnInfo();
     }
 
-    public function loadListInfo(){
+    public function loadListActionInfo(){
        //loading departments
         $depDataMapper = new DepartmentDataMapper($this->dbs['kernel']);
-        $this->setInfo('departamentos', $depDataMapper->getAllWithFilters($this->request) );
-       
+       // $this->setInfo('departamentos', $depDataMapper->getLimitWithFilters($this->request) );
+        $this->setInfo('departamentos', $depDataMapper->getLimitWithFilters($this->request->get('page'),$this->request) );
+
+        $this->setInfo('pagination', new PaginationObject($this->request->get('page') , $depDataMapper->getCount() ) );
+        
         return  $this->returnInfo();  // $teste[0]['departamentos'];
     }
 
-    public function saveAction(){
+    public function loadListViewInfo(){
+        
+        return  $this->returnInfo();  // $teste[0]['departamentos'];
+    }
+
+    public function editAction(){
        
         $this->setData();
         $this->validateNecessaryData();
